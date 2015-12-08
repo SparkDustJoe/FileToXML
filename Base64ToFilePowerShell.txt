@@ -1,0 +1,11 @@
+﻿#Convert the EXE to Xml using itself, and then copy just the EncodedFileContents to a new 
+# text document called f2x.txt.  This text can be copied to the target machine via email, 
+# shared clipboard, any number of means.
+#Then use the below script to turn it back into an EXE.  The created file at the very
+# beginning of this process can be confirmed by using the Clipboard option from the source 
+# machine to create the EXE again on the target machine (but named differently, you can't
+# overwrite a file in use).
+
+$Base64 = Get-Content .\f2x.txt
+$Converted = [Convert]::FromBase64String($Base64)
+Set-Content -Path .\F2X.exe -Value $Converted -Encoding Byte

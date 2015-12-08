@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+  elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:element name="EncodedFile">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="OriginalFilename" type="xs:string" minOccurs="1"/>
+        <xs:element name="OriginalSize" type="xs:positiveInteger" minOccurs="1"/>
+        <xs:element name="IsCompressed" type="xs:boolean" minOccurs="1"/>
+        <xs:element name="CompressionMethod" type="compressionType" minOccurs="0"/>
+        <xs:element name="Description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="EncodedFileContents" type="xs:base64Binary" minOccurs="1"/>
+        <xs:element name="OriginalHashMD5" type="xs:base64Binary" minOccurs="1"/>
+        <xs:element name="OriginalHashSHA1" type="xs:base64Binary" minOccurs="1"/>
+        <xs:element name="OriginalHashSHA256" type="xs:base64Binary" minOccurs="1"/>
+        <xs:element name="OriginalHashRIPEMD" type="xs:base64Binary" minOccurs="1"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <!--USER DEFINED TYPES-->
+  <xs:simpleType name="compressionType">
+    <xs:restriction base="xs:string">
+      <!--ADD MORE COMPRESSION ALGORITHMS HERE AS THEY ARE ENCORPORATED-->
+      <xs:enumeration value="GZIP" />
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
