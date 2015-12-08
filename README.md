@@ -1,2 +1,28 @@
 # FileToXML
 File To XML, Convert Any File To Portable Text with Hashes
+
+Example Output:
+
+`<?xml version="1.0" encoding="utf-8"?>
+<EncodedFile>
+  <!--always virus-scan any file you get from the Internet, regardless of where you got it - TRUST NO ONE-->
+  <OriginalFilename>Base64ToFilePowerShell.txt</OriginalFilename>
+  <OriginalSize>675</OriginalSize>
+  <IsCompressed>false</IsCompressed>
+  <OriginalHashMD5>AE9uTNXpon3eGPSnGh/J4Q==</OriginalHashMD5>
+  <OriginalHashSHA1>jJGPvzYAQlIX8d7vcgDIZ3b3mGM=</OriginalHashSHA1>
+  <OriginalHashSHA256>N7QxqxUODbSBWdUwI/li/eKhUoc9aJgcno+M0J/mY1g=</OriginalHashSHA256>
+  <OriginalHashRIPEMD>nOAgddvvVzpRwFP62MLeDTEHiFA=</OriginalHashRIPEMD>
+  <EncodedFileContents>77u/I0NvbnZlcnQgdGhlIEVYRSB0byBYbWwgdXNpbmcgaXRzZWxmLCBhbmQgdGhlbiBjb3B5IGp1
+c3QgdGhlIEVuY29kZWRGaWxlQ29udGVudHMgdG8gYSBuZXcgDQojIHRleHQgZG9jdW1lbnQgY2Fs
+bGVkIGYyeC50eHQuICBUaGlzIHRleHQgY2FuIGJlIGNvcGllZCB0byB0aGUgdGFyZ2V0IG1hY2hp
+bmUgdmlhIGVtYWlsLCANCiMgc2hhcmVkIGNsaXBib2FyZCwgYW55IG51bWJlciBvZiBtZWFucy4N
+CiNUaGVuIHVzZSB0aGUgYmVsb3cgc2NyaXB0IHRvIHR1cm4gaXQgYmFjayBpbnRvIGFuIEVYRS4g
+IFRoZSBjcmVhdGVkIGZpbGUgYXQgdGhlIHZlcnkNCiMgYmVnaW5uaW5nIG9mIHRoaXMgcHJvY2Vz
+cyBjYW4gYmUgY29uZmlybWVkIGJ5IHVzaW5nIHRoZSBDbGlwYm9hcmQgb3B0aW9uIGZyb20gdGhl
+IHNvdXJjZSANCiMgbWFjaGluZSB0byBjcmVhdGUgdGhlIEVYRSBhZ2FpbiBvbiB0aGUgdGFyZ2V0
+IG1hY2hpbmUgKGJ1dCBuYW1lZCBkaWZmZXJlbnRseSwgeW91IGNhbid0DQojIG92ZXJ3cml0ZSBh
+IGZpbGUgaW4gdXNlKS4NCg0KJEJhc2U2NCA9IEdldC1Db250ZW50IC5cZjJ4LnR4dA0KJENvbnZl
+cnRlZCA9IFtDb252ZXJ0XTo6RnJvbUJhc2U2NFN0cmluZygkQmFzZTY0KQ0KU2V0LUNvbnRlbnQg
+LVBhdGggLlxGMlguZXhlIC1WYWx1ZSAkQ29udmVydGVkIC1FbmNvZGluZyBCeXRl</EncodedFileContents>
+</EncodedFile>`
