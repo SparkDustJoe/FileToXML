@@ -23,6 +23,8 @@
     <xs:restriction base="xs:string">
       <!--ADD MORE COMPRESSION ALGORITHMS HERE AS THEY ARE ENCORPORATED-->
       <xs:enumeration value="GZIP" />
+      <xs:enumeration value="GZip" />
+      <xs:enumeration value="gzip" />
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>
