@@ -17,6 +17,7 @@ namespace FileToXML
         private Direction _direction = Direction.Encode;
         private bool _silent = false;
         private string _description = null;
+        private Common.CompressionMethod _compressMethod = Common.CompressionMethod.None;
 
         public enum Direction: byte
         {
@@ -35,6 +36,7 @@ namespace FileToXML
 
         private void frmExecute_Load(object sender, EventArgs e)
         {
+            cmbCompression.SelectedIndex = 0;
             string cmdLine = Environment.CommandLine + " ";
             if (cmdLine.Contains(" -compress "))
             {
@@ -209,6 +211,15 @@ namespace FileToXML
                 //System.Media.SystemSounds.Beep.Play();
                 return;
             }
+            if (this._direction == Direction.Encode && string.IsNullOrWhiteSpace(this._description) && chkDescription.Checked)
+            {
+                if (!_silent)
+                    MessageBox.Show(this, "Oops!  You forgot your description! \r\n" +
+                        "Click the '...' button next to the Description checkbox to set the description or uncheck the box.",
+                        "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //System.Media.SystemSounds.Beep.Play();
+                return;
+            }
             this.Enabled = false;
             Exception exceptionArg = null;
             bool success = false;
@@ -216,14 +227,17 @@ namespace FileToXML
             {
                 string tempDesc = (chkDescription.Checked == true) ? _description : null;
                 if (!chkClipboard.Checked)
-                    success = Common.WriteEncodedFile(txtSource.Text, txtDestination.Text, chkCompress.Checked, tempDesc, out exceptionArg);
+                    success = Common.WriteEncodedFile(
+                        txtSource.Text, txtDestination.Text, chkCompress.Checked, _compressMethod, tempDesc, out exceptionArg);
                 else
                 {
                     string TempPath = GetMyCurrentRunFromPath() + "!!clipboard.b64.txt";
-                    success = Common.WriteEncodedFile(txtSource.Text, TempPath, chkCompress.Checked, tempDesc, out exceptionArg);
+                    success = Common.WriteEncodedFile(txtSource.Text, TempPath, chkCompress.Checked, _compressMethod, tempDesc, out exceptionArg);
                     if (exceptionArg == null)
                     {
                         Clipboard.SetText(File.ReadAllText(TempPath));
+                        Application.DoEvents();
+                        File.Delete(TempPath);
                     }
                 }
             }
@@ -243,9 +257,7 @@ namespace FileToXML
             }
             else
                 if (!_silent)
-                    MessageBox.Show("Done." +
-                        (chkClipboard.Checked && _direction == Direction.Decode 
-                        ? "\r\n\r\nLook in the program directory for the output file." : ""));
+                    MessageBox.Show("Done.");
             this.Enabled = true;
         }
 
@@ -260,11 +272,11 @@ namespace FileToXML
             if (_direction == Direction.Encode)
             {
                 ofdLoad.Filter = "All Files *.*|*.*";
-                sfdSave.Filter = "Base64 Encoded Files *.b64.txt|*.b64.txt|XML Files *.xml|*.xml|All Files *.*|*.*";
+                sfdSave.Filter = "XML Files *.xml|*.xml|Base64 Encoded Files *.b64.txt|*.b64.txt|All Files *.*|*.*";
             }
             else
             {
-                ofdLoad.Filter = "Base64 Encoded Files *.b64.txt|*.b64.txt|XML Files *.xml|*.xml|All Files *.*|*.*";
+                ofdLoad.Filter = "XML Files *.xml|*.xml|Base64 Encoded Files *.b64.txt|*.b64.txt|All Files *.*|*.*";
                 sfdSave.Filter = "All Files *.*|*.*";
             }
             DialogResult ret = ofdLoad.ShowDialog(this);
@@ -275,7 +287,7 @@ namespace FileToXML
                 {//ENCODING==================================================================
                     if (string.IsNullOrWhiteSpace(txtDestination.Text) && !chkClipboard.Checked)
                     {
-                        txtDestination.Text = txtSource.Text + ".b64.txt";
+                        txtDestination.Text = txtSource.Text + ".xml";
                         if (File.Exists(txtDestination.Text))
                         {
                             if (!_silent && !chkOverWrite.Checked)
@@ -328,34 +340,23 @@ namespace FileToXML
             if (_direction == Direction.Encode)
             {
                 ofdLoad.Filter = "All Files *.*|*.*";
-                sfdSave.Filter = "Base64 Encoded Files *.b64.txt|*.b64.txt|XML Files *.xml|*.xml|All Files *.*|*.*";
+                sfdSave.Filter = "XML Files *.xml|*.xml|Base64 Encoded Files *.b64.txt|*.b64.txt|All Files *.*|*.*";
             }
             else
             {
-                ofdLoad.Filter = "Base64 Encoded Files *.b64.txt|*.b64.txt|XML Files *.xml|*.xml|All Files *.*|*.*";
+                ofdLoad.Filter = "XML Files *.xml|*.xml|Base64 Encoded Files *.b64.txt|*.b64.txt|All Files *.*|*.*";
                 sfdSave.Filter = "All Files *.*|*.*";
             }
             DialogResult ret = sfdSave.ShowDialog(this);
             if (ret == DialogResult.OK)
             {
                 txtDestination.Text = sfdSave.FileName;
-                if (!chkOverWrite.Checked && !_silent && File.Exists(txtDestination.Text))
-                {
-                    lblDestination.Text = "DESTINATION:  CAUTION - FILE ALREADY EXISTS!";
-                }
             }
         }
 
         private void chkOverWrite_CheckedChanged(object sender, EventArgs e)
         {
-            lblDestination.Text = "DESTINATION:";
-            if (!chkOverWrite.Checked && File.Exists(txtDestination.Text))
-            {
-                MessageBox.Show(this, "Caution:  The destination filename already exists.\r\n\r\n" +
-                    "If this file should be overwritten, please check the box to overwrite.",
-                    "CAUTION: FILE ALREADY EXISTS", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                lblDestination.Text = "DESTINATION:  CAUTION - FILE ALREADY EXISTS!";
-            }
+            txtDestination_TextChanged(null, null);
         }
 
         private void chkDescription_CheckedChanged(object sender, EventArgs e)
@@ -383,9 +384,12 @@ namespace FileToXML
                     btnBrowseDestination.Visible = false;
                     txtDestination.Visible = false;
                     txtDestination.Text = "";
+                    chkOverWrite.Visible = false;
+                    chkOverWrite.Checked = false;
                 }
                 else
                 {
+                    chkOverWrite.Visible = true;
                     btnBrowseDestination.Visible = true;
                     txtDestination.Visible = true;
                     txtDestination.Text = "";
@@ -396,13 +400,15 @@ namespace FileToXML
                 if (chkClipboard.Checked)
                 {
                     btnBrowseSource.Enabled = false;
+                    btnBrowseSource.Visible = false;
+                    txtSource.Text = "Listening for clipboard activity...";
                     btnExecute.Enabled = false;
-                    txtSource.Text = "";
                     tmrCilpboardPoll.Enabled = true;
                 }
                 else
                 {
                     btnBrowseSource.Enabled = true;
+                    btnBrowseSource.Visible = true;
                     txtSource.Text = "";
                     tmrCilpboardPoll.Enabled = false;
                     btnExecute.Enabled = true;
@@ -419,6 +425,8 @@ namespace FileToXML
                 if (cText.Contains("<EncodedFile>") && cText.Contains("</EncodedFile>"))
                 {
                     tmrCilpboardPoll.Enabled = false;
+                    txtSource.Text = "Found something... analyzing...";
+                    Application.DoEvents();
                     Assembly a = Assembly.GetExecutingAssembly();
                     string TempPath = GetMyCurrentRunFromPath() + "!!clipboard.b64.txt";
                     File.WriteAllText(TempPath, cText);
@@ -434,17 +442,19 @@ namespace FileToXML
                     x.Validate(schema, (o, ee) => { problems = true; problem = ee; });
                     if (problems)
                     {
-                        MessageBox.Show(this, "The encoded file in the clipboard currently has issues: \r\n" + problem.Message +
+                        MessageBox.Show(this, "The encoded file in the clipboard currently has issues and will be removed: \r\n" + problem.Message +
                             "\r\n\r\nIf you think you've received this message in error, examine the XML to make sure that the format is correct, that there " +
                             "are no unsual characters, and that all XML fields are properly terminated.  A sample encoded file and XSD should have been " +
                             "included with the program for reference.");
                         chkClipboard.Checked = false;
+                        chkClipboard_CheckedChanged(null, null);
                         File.Delete(TempPath);
                         Clipboard.Clear();
                         return;
                     }
                     //if everything is ok, then get ready to decode the temp file.
                     txtSource.Text = TempPath;
+                    Application.DoEvents();
                     string description = null;
                     string origFilename = Common.ExtractOriginalFileName(txtSource.Text, out description);
                     if (string.IsNullOrWhiteSpace(origFilename))
@@ -462,12 +472,15 @@ namespace FileToXML
                     }
                     else
                     {
-                        res = MessageBox.Show(this, "The file contains no description.\r\n" +
+                        res = MessageBox.Show(this, "The file contains no description.\r\n\r\n" +
                                 "Do you still wish to write the original file to disk?\r\n" +
                                 origFilename, "FILE DESCRIPTION", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                     }
                     if (res == DialogResult.Yes)
+                    {
+                        btnBrowseDestination_Click(null, null);
                         btnExecute_Click(null, null);
+                    }
                     else
                     {
                         txtDestination.Text = "*Operation Canceled*";
@@ -492,6 +505,54 @@ namespace FileToXML
             if (!thePath.EndsWith(@"\"))
                 thePath += @"\";
             return thePath;
+        }
+
+        private void txtDestination_TextChanged(object sender, EventArgs e)
+        {
+            if (File.Exists(txtDestination.Text) && !chkClipboard.Checked && !chkOverWrite.Checked && !_silent)
+            {
+                lblDestination.Text = "DESTINATION:  CAUTION - FILE ALREADY EXISTS!";
+            }
+            else
+                lblDestination.Text = "DESTINATION:";
+
+        }
+
+        private void chkCompress_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkCompress.Checked)
+            {
+                cmbCompression.SelectedIndex = 1;
+                _compressMethod = Common.CompressionMethod.GZip;
+            }
+            else
+            {
+                _compressMethod = Common.CompressionMethod.None;
+                cmbCompression.SelectedIndex = 0;
+            }
+        }
+
+        private void btnModes_Click(object sender, EventArgs e)
+        {
+            DialogResult res = 
+                MessageBox.Show(
+                    this, "Are you sure you want to change modes?","CHANGE MODES?",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+            if (res == DialogResult.OK)
+            {
+                Application.Restart();
+            }
+        }
+
+        private void cmbCompression_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //if using a method other than GZip, set that here
+            if (cmbCompression.SelectedIndex == 0)
+                _compressMethod = Common.CompressionMethod.None;
+            else
+            {
+                _compressMethod = Common.CompressionMethod.GZip;
+            }
         }
     }
 }

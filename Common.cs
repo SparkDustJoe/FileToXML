@@ -12,8 +12,15 @@ namespace FileToXML
 {
     public class Common
     {
+        public enum CompressionMethod : int
+        {
+            None = 0,
+            GZip = 1
+        }
 
-        public static bool WriteEncodedFile(string source, string destination, bool compressFirst, string description, out Exception exceptionArg)
+        public static bool WriteEncodedFile(string source, string destination, bool compressFirst, 
+            CompressionMethod compressMethod, string description,
+            out Exception exceptionArg)
         {
             exceptionArg = null;
 
@@ -26,16 +33,22 @@ namespace FileToXML
             string contentsRipeMD = Convert.ToBase64String(new RIPEMD160Managed().ComputeHash(contents));
 
             if (compressFirst)
-                contents = Compress(contents);
+                contents = CompressGZip(contents);
             string encodedContents = Convert.ToBase64String(contents, Base64FormattingOptions.InsertLineBreaks);
 
             XElement encodedFile = new XElement("EncodedFile");
-            encodedFile.Add(new XComment("always virus-scan any file you get from the Internet, regardless of where you got it - TRUST NO ONE"));
+            encodedFile.Add(new XComment(
+                "always virus-scan any file you get from the Internet, regardless of where you got it - TRUST NO ONE"));
             encodedFile.Add(new XElement("OriginalFilename", Path.GetFileName(source)));
             encodedFile.Add(new XElement("OriginalSize", contentsOriginalSize));
             encodedFile.Add(new XElement("IsCompressed", compressFirst));
             if (compressFirst)
+            {
+                //If using any method other than GZip, set that here.
                 encodedFile.Add(new XElement("CompressionMethod", "GZip"));
+            }
+            else
+                encodedFile.Add(new XElement("CompressionMethod", "None"));
             if (!string.IsNullOrWhiteSpace(description))
             {
                 //encode description first before storing it
@@ -69,8 +82,14 @@ namespace FileToXML
                 if (compElement != null && !string.IsNullOrWhiteSpace(compElement.Value))
                 {
                     bool decompressMe = false;
-                    if(bool.TryParse(compElement.Value, out decompressMe) && decompressMe)
-                        contents = Decompress(contents);
+                    if (bool.TryParse(compElement.Value, out decompressMe) && decompressMe)
+                    {
+                        // If using any method other than GZip, put that logic here.
+                        // Parse the CompressionMethod node for which one was used and pick accordingly.
+
+                        contents = DecompressGzip(contents);
+                    }
+
                 }
             }
             else
@@ -189,7 +208,7 @@ namespace FileToXML
         }
 
 
-        private static byte[] Compress(byte[] source)
+        private static byte[] CompressGZip(byte[] source)
         {
             using (MemoryStream msIn = new MemoryStream(source))
             {
@@ -204,7 +223,7 @@ namespace FileToXML
             }
         }
 
-        private static byte[] Decompress(byte[] source)
+        private static byte[] DecompressGzip(byte[] source)
         {
             using (MemoryStream msIn = new MemoryStream(source))
             {

@@ -45,13 +45,15 @@
             this.btnEditDescription = new System.Windows.Forms.Button();
             this.tmrCilpboardPoll = new System.Windows.Forms.Timer(this.components);
             this.chkClipboard = new System.Windows.Forms.CheckBox();
+            this.btnModes = new System.Windows.Forms.Button();
+            this.cmbCompression = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // btnBrowseSource
             // 
             this.btnBrowseSource.BackColor = System.Drawing.Color.Cyan;
-            this.btnBrowseSource.Location = new System.Drawing.Point(16, 50);
-            this.btnBrowseSource.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnBrowseSource.Location = new System.Drawing.Point(13, 28);
+            this.btnBrowseSource.Margin = new System.Windows.Forms.Padding(4);
             this.btnBrowseSource.Name = "btnBrowseSource";
             this.btnBrowseSource.Size = new System.Drawing.Size(100, 28);
             this.btnBrowseSource.TabIndex = 0;
@@ -71,19 +73,20 @@
             // 
             // chkCompress
             // 
-            this.chkCompress.Location = new System.Drawing.Point(44, 85);
-            this.chkCompress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkCompress.Location = new System.Drawing.Point(41, 63);
+            this.chkCompress.Margin = new System.Windows.Forms.Padding(4);
             this.chkCompress.Name = "chkCompress";
             this.chkCompress.Size = new System.Drawing.Size(460, 44);
             this.chkCompress.TabIndex = 2;
             this.chkCompress.Text = "Compress file before encoding (not recommended for some images, binaries, music f" +
     "iles (such as MP3/WMA/AAC), etc.)";
             this.chkCompress.UseVisualStyleBackColor = true;
+            this.chkCompress.CheckedChanged += new System.EventHandler(this.chkCompress_CheckedChanged);
             // 
             // lblSource
             // 
             this.lblSource.AutoSize = true;
-            this.lblSource.Location = new System.Drawing.Point(16, 31);
+            this.lblSource.Location = new System.Drawing.Point(13, 9);
             this.lblSource.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSource.Name = "lblSource";
             this.lblSource.Size = new System.Drawing.Size(70, 17);
@@ -93,7 +96,7 @@
             // lblDestination
             // 
             this.lblDestination.AutoSize = true;
-            this.lblDestination.Location = new System.Drawing.Point(16, 134);
+            this.lblDestination.Location = new System.Drawing.Point(13, 112);
             this.lblDestination.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblDestination.Name = "lblDestination";
             this.lblDestination.Size = new System.Drawing.Size(104, 17);
@@ -103,8 +106,8 @@
             // btnBrowseDestination
             // 
             this.btnBrowseDestination.BackColor = System.Drawing.Color.Cyan;
-            this.btnBrowseDestination.Location = new System.Drawing.Point(16, 154);
-            this.btnBrowseDestination.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnBrowseDestination.Location = new System.Drawing.Point(13, 132);
+            this.btnBrowseDestination.Margin = new System.Windows.Forms.Padding(4);
             this.btnBrowseDestination.Name = "btnBrowseDestination";
             this.btnBrowseDestination.Size = new System.Drawing.Size(100, 28);
             this.btnBrowseDestination.TabIndex = 4;
@@ -115,8 +118,8 @@
             // txtSource
             // 
             this.txtSource.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.txtSource.Location = new System.Drawing.Point(124, 53);
-            this.txtSource.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtSource.Location = new System.Drawing.Point(121, 31);
+            this.txtSource.Margin = new System.Windows.Forms.Padding(4);
             this.txtSource.Name = "txtSource";
             this.txtSource.ReadOnly = true;
             this.txtSource.Size = new System.Drawing.Size(588, 22);
@@ -125,22 +128,23 @@
             // txtDestination
             // 
             this.txtDestination.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.txtDestination.Location = new System.Drawing.Point(124, 156);
-            this.txtDestination.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtDestination.Location = new System.Drawing.Point(121, 134);
+            this.txtDestination.Margin = new System.Windows.Forms.Padding(4);
             this.txtDestination.Name = "txtDestination";
             this.txtDestination.ReadOnly = true;
             this.txtDestination.Size = new System.Drawing.Size(588, 22);
             this.txtDestination.TabIndex = 8;
+            this.txtDestination.TextChanged += new System.EventHandler(this.txtDestination_TextChanged);
             // 
             // btnExecute
             // 
             this.btnExecute.BackColor = System.Drawing.Color.Lime;
             this.btnExecute.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnExecute.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExecute.Location = new System.Drawing.Point(373, 188);
-            this.btnExecute.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnExecute.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExecute.Location = new System.Drawing.Point(370, 197);
+            this.btnExecute.Margin = new System.Windows.Forms.Padding(4);
             this.btnExecute.Name = "btnExecute";
-            this.btnExecute.Size = new System.Drawing.Size(204, 47);
+            this.btnExecute.Size = new System.Drawing.Size(204, 30);
             this.btnExecute.TabIndex = 9;
             this.btnExecute.Text = "EXECUTE";
             this.btnExecute.UseVisualStyleBackColor = false;
@@ -150,11 +154,11 @@
             // 
             this.btnQuit.BackColor = System.Drawing.Color.Red;
             this.btnQuit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnQuit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnQuit.Location = new System.Drawing.Point(585, 188);
-            this.btnQuit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnQuit.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnQuit.Location = new System.Drawing.Point(581, 197);
+            this.btnQuit.Margin = new System.Windows.Forms.Padding(4);
             this.btnQuit.Name = "btnQuit";
-            this.btnQuit.Size = new System.Drawing.Size(128, 47);
+            this.btnQuit.Size = new System.Drawing.Size(128, 30);
             this.btnQuit.TabIndex = 10;
             this.btnQuit.Text = "QUIT";
             this.btnQuit.UseVisualStyleBackColor = false;
@@ -163,8 +167,8 @@
             // chkOverWrite
             // 
             this.chkOverWrite.AutoSize = true;
-            this.chkOverWrite.Location = new System.Drawing.Point(44, 204);
-            this.chkOverWrite.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkOverWrite.Location = new System.Drawing.Point(41, 168);
+            this.chkOverWrite.Margin = new System.Windows.Forms.Padding(4);
             this.chkOverWrite.Name = "chkOverWrite";
             this.chkOverWrite.Size = new System.Drawing.Size(292, 21);
             this.chkOverWrite.TabIndex = 11;
@@ -175,8 +179,8 @@
             // chkDescription
             // 
             this.chkDescription.AutoSize = true;
-            this.chkDescription.Location = new System.Drawing.Point(512, 97);
-            this.chkDescription.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkDescription.Location = new System.Drawing.Point(508, 63);
+            this.chkDescription.Margin = new System.Windows.Forms.Padding(4);
             this.chkDescription.Name = "chkDescription";
             this.chkDescription.Size = new System.Drawing.Size(150, 21);
             this.chkDescription.TabIndex = 12;
@@ -186,8 +190,8 @@
             // 
             // btnEditDescription
             // 
-            this.btnEditDescription.Location = new System.Drawing.Point(676, 92);
-            this.btnEditDescription.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnEditDescription.Location = new System.Drawing.Point(672, 63);
+            this.btnEditDescription.Margin = new System.Windows.Forms.Padding(4);
             this.btnEditDescription.Name = "btnEditDescription";
             this.btnEditDescription.Size = new System.Drawing.Size(37, 28);
             this.btnEditDescription.TabIndex = 13;
@@ -203,7 +207,7 @@
             // chkClipboard
             // 
             this.chkClipboard.AutoSize = true;
-            this.chkClipboard.Location = new System.Drawing.Point(511, 125);
+            this.chkClipboard.Location = new System.Drawing.Point(508, 91);
             this.chkClipboard.Name = "chkClipboard";
             this.chkClipboard.Size = new System.Drawing.Size(146, 21);
             this.chkClipboard.TabIndex = 14;
@@ -211,12 +215,39 @@
             this.chkClipboard.UseVisualStyleBackColor = true;
             this.chkClipboard.CheckedChanged += new System.EventHandler(this.chkClipboard_CheckedChanged);
             // 
+            // btnModes
+            // 
+            this.btnModes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btnModes.Location = new System.Drawing.Point(13, 196);
+            this.btnModes.Name = "btnModes";
+            this.btnModes.Size = new System.Drawing.Size(157, 31);
+            this.btnModes.TabIndex = 15;
+            this.btnModes.Text = "CHANGE MODES";
+            this.btnModes.UseVisualStyleBackColor = false;
+            this.btnModes.Click += new System.EventHandler(this.btnModes_Click);
+            // 
+            // cmbCompression
+            // 
+            this.cmbCompression.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCompression.Enabled = false;
+            this.cmbCompression.FormattingEnabled = true;
+            this.cmbCompression.Items.AddRange(new object[] {
+            "None",
+            "GZip"});
+            this.cmbCompression.Location = new System.Drawing.Point(401, 91);
+            this.cmbCompression.Name = "cmbCompression";
+            this.cmbCompression.Size = new System.Drawing.Size(91, 24);
+            this.cmbCompression.TabIndex = 16;
+            this.cmbCompression.SelectedIndexChanged += new System.EventHandler(this.cmbCompression_SelectedIndexChanged);
+            // 
             // frmExecute
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnQuit;
-            this.ClientSize = new System.Drawing.Size(729, 250);
+            this.ClientSize = new System.Drawing.Size(729, 238);
+            this.Controls.Add(this.cmbCompression);
+            this.Controls.Add(this.btnModes);
             this.Controls.Add(this.chkClipboard);
             this.Controls.Add(this.btnEditDescription);
             this.Controls.Add(this.chkDescription);
@@ -231,7 +262,7 @@
             this.Controls.Add(this.chkCompress);
             this.Controls.Add(this.btnBrowseSource);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.Name = "frmExecute";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -262,5 +293,7 @@
         private System.Windows.Forms.Button btnEditDescription;
         private System.Windows.Forms.Timer tmrCilpboardPoll;
         private System.Windows.Forms.CheckBox chkClipboard;
+        private System.Windows.Forms.Button btnModes;
+        private System.Windows.Forms.ComboBox cmbCompression;
     }
 }

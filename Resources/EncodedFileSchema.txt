@@ -8,7 +8,7 @@
         <xs:element name="OriginalFilename" type="xs:string" minOccurs="1"/>
         <xs:element name="OriginalSize" type="xs:positiveInteger" minOccurs="1"/>
         <xs:element name="IsCompressed" type="xs:boolean" minOccurs="1"/>
-        <xs:element name="CompressionMethod" type="compressionType" minOccurs="0"/>
+        <xs:element name="CompressionMethod" type="compressionType" minOccurs="1"/>
         <xs:element name="Description" type="xs:string" minOccurs="0" maxOccurs="1"/>
         <xs:element name="EncodedFileContents" type="xs:base64Binary" minOccurs="1"/>
         <xs:element name="OriginalHashMD5" type="xs:base64Binary" minOccurs="1"/>
@@ -25,6 +25,9 @@
       <xs:enumeration value="GZIP" />
       <xs:enumeration value="GZip" />
       <xs:enumeration value="gzip" />
+	  <xs:enumeration value="NONE" />
+      <xs:enumeration value="None" />
+      <xs:enumeration value="none" />
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>
