@@ -3,7 +3,7 @@ File To XML, Convert Any File To Portable Text with Hashes
 
 Example Output:
 
-`<?xml version="1.0" encoding="utf-8"?>
+```<?xml version="1.0" encoding="utf-8"?>
 <EncodedFile>
   <!--always virus-scan any file you get from the Internet, regardless of where you got it - TRUST NO ONE-->
   <OriginalFilename>Base64ToFilePowerShell.txt</OriginalFilename>
@@ -25,4 +25,4 @@ IG1hY2hpbmUgKGJ1dCBuYW1lZCBkaWZmZXJlbnRseSwgeW91IGNhbid0DQojIG92ZXJ3cml0ZSBh
 IGZpbGUgaW4gdXNlKS4NCg0KJEJhc2U2NCA9IEdldC1Db250ZW50IC5cZjJ4LnR4dA0KJENvbnZl
 cnRlZCA9IFtDb252ZXJ0XTo6RnJvbUJhc2U2NFN0cmluZygkQmFzZTY0KQ0KU2V0LUNvbnRlbnQg
 LVBhdGggLlxGMlguZXhlIC1WYWx1ZSAkQ29udmVydGVkIC1FbmNvZGluZyBCeXRl</EncodedFileContents>
-</EncodedFile>`
+</EncodedFile>
